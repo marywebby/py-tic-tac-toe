@@ -1,3 +1,5 @@
+import random
+
 # global variable  
 board = ["-", "-", "-",
          "-", "-", "-",
@@ -28,11 +30,74 @@ def playerInput(board):
 def checkHorizontal(board):
     # `global` allows for the varibale to change on a global scale
     global winner
+    if board[0] == board[1] == board[2] and board[1] != "-":
+        winner = board[0]
+        return True
+    elif board[3] == board[4] == board[5] and board[3] != "-":
+        winner = board[3]
+        return True
+    elif board[6] == board[7] == board[8] and board[6] != "-":
+        winner = board[6]
+        return True
+    
+def checkRow(board): 
+    global winner 
+    if board[0] == board[3] == board[6] and board[0] != "-":
+        winner = board[0]
+        return True
+    elif board[1] == board[4] == board[7] and board[1] != "-":
+        winner = board[1]
+        return True
+    elif board[2] == board[5] == board[8] and board[2] != "-":
+        winner = board[2]
+        return True
 
+def checkDiag(board):
+    global winner 
+    if board[0] == board[4] == board[8] and board[0] != "-":
+        winner = board[0]
+        return True
+    elif board[6] == board[4] == board[2] and board[6] != "-":
+        winner = board[6]
+        return True
+    
+def checktie(board):
+    if "-" not in board:
+        printBoard(board)
+        print("It's a tie!")
+        gameRunning = False
+        
+def checkForWin():
+    global gameRunning 
+    if checkDiag(board) or checkHorizontal(board) or checkRow(board):
+        print(f"The winner is {winner}") 
+        gameRunning = False
+        
+        
+def switchPlayer():
+    global currentPlayer
+    if currentPlayer == "X":
+        currentPlayer = "O"
+    else:
+        currentPlayer = "X"
 # switch the player 
+
+# computer 
+def computer(board):
+    while currentPlayer == "O":
+        position = random.randint(0, 8)
+        if board[position] == "-":
+            board[position] = "O"
+            switchPlayer()
 
 # check for win or tie again 
 
 while gameRunning:
     printBoard(board)
     playerInput(board)
+    checkForWin()
+    checktie(board)
+    switchPlayer()
+    computer(board)
+    checkForWin()
+    checktie(board)
